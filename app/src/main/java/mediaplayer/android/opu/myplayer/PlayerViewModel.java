@@ -19,4 +19,8 @@ public class PlayerViewModel extends ViewModel {
     public SimpleExoPlayer getMyPlayer() {
         return myPlayer;
     }
+
+    public void dispose(){
+        myPlayer=null;
+    }
 }

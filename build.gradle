@@ -27,4 +27,5 @@ task clean(type: Delete) {
 }
 ext{
     exoPlayerversion='2.8.0'
+    lifeCycleVersion='1.0.0'
 }
