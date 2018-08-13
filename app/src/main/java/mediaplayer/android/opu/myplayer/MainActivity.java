@@ -26,7 +26,7 @@ import com.google.android.exoplayer2.util.Util;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String mpdUrl="https://raw.githubusercontent.com/mdfazla/RepoDashMedia/master/Mucize_Teaser_dash.mpd";
+    private static final String mpdUrl="https://raw.githubusercontent.com/mdfazla/testRepo/master/winter_journey_dash.mpd";//"https://raw.githubusercontent.com/mdfazla/RepoDashMedia/master/Mucize_Teaser_dash.mpd";
     private final String User_Agent="MyExoPlayer";
 
     @Override
