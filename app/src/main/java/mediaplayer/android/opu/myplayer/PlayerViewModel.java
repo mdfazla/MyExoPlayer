@@ -3,7 +3,6 @@ package mediaplayer.android.opu.myplayer;
 import android.arch.lifecycle.ViewModel;
 
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.ui.PlayerView;
 
 /**
  * Created by Md.Fazla Rabbi OPu on 8/13/2018.
@@ -19,6 +18,7 @@ public class PlayerViewModel extends ViewModel {
     public SimpleExoPlayer getMyPlayer() {
         return myPlayer;
     }
+
 
     public void dispose(){
         myPlayer=null;

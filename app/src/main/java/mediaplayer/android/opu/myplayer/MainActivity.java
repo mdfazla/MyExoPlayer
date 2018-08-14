@@ -4,6 +4,8 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -15,6 +17,7 @@ import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
@@ -24,17 +27,22 @@ import com.google.android.exoplayer2.upstream.TransferListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String mpdUrl = "https://raw.githubusercontent.com/mdfazla/testRepo/master/winter_journey_dash.mpd";//"https://raw.githubusercontent.com/mdfazla/RepoDashMedia/master/Mucize_Teaser_dash.mpd";
+    private static final String mpdUrl = "https://raw.githubusercontent.com/mdfazla/RepoDashMedia/master/winter_journey_dash.mpd";//"https://raw.githubusercontent.com/mdfazla/RepoDashMedia/master/Mucize_Teaser_dash.mpd";
     private final String User_Agent = "MyExoPlayer";
     private PlayerViewModel viewModel;
-    private com.google.android.exoplayer2.ui.PlayerView playerView;
+    private PlayerView playerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.player_view_main_layout);
+        Utils.getDeviceResolution(this);
         playerView = findViewById(R.id.player_view);
         playerView.requestFocus();
+
 
 
     }
@@ -47,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
         if (viewModel.getMyPlayer() != null) {
             SimpleExoPlayer player = viewModel.getMyPlayer();
             playerView.setPlayer(player);
+            if(!player.getPlayWhenReady())
+            player.setPlayWhenReady(true);
+            //player.setVideoTextureView(playerView);
+
+
         } else
             initPlayer();
     }
@@ -63,15 +76,8 @@ public class MainActivity extends AppCompatActivity {
         playerView.setPlayer(player);
 
         player.setPlayWhenReady(true);
-/*        MediaSource mediaSource = new HlsMediaSource(Uri.parse("https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"),
-                mediaDataSourceFactory, mainHandler, null);*/
+        //player.setVideoTextureView(playerView);
 
-        //"https://raw.githubusercontent.com/mdfazla/BeautifulBangladesh/master/demo_video.mp4"
-
-        //MediaSource mediaSource = new ExtractorMediaSource.Factory(mediaDataSourceFactory).createMediaSource(Uri.parse(mpdUrl));
-
-        // MediaSource mediaSource = new DashMediaSource.Factory(new DefaultDashChunkSource.Factory(mediaDataSourceFactory), null)
-        //         .createMediaSource(Uri.parse(mpdUrl));
         MediaSource mediaSource = buildDashMediaSource(Uri.parse(mpdUrl));
 
 
@@ -93,6 +99,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if(viewModel.getMyPlayer()!=null)
+        viewModel.getMyPlayer().setPlayWhenReady(false);
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         viewModel.getMyPlayer().stop();
@@ -105,5 +118,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         playerView=null;
+    }
+
+    private void addToWindowManager(){
+
     }
 }
